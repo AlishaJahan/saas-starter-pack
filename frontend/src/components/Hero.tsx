@@ -49,9 +49,12 @@ const Hero = () => {
                 <ArrowRight className="w-5 h-5" />
               </motion.button>
             </Link>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-neutral-400 hover:text-white hover:bg-white/5 transition-all">
-              View Demo
-            </button>
+            <a href="#pricing" className="w-full sm:w-auto">
+              <button className="w-full px-8 py-4 rounded-xl font-bold text-neutral-400 hover:text-white hover:bg-white/5 transition-all border border-neutral-800">
+                View Demo
+              </button>
+            </a>
+
           </div>
         </motion.div>
 
@@ -60,15 +63,23 @@ const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-20 relative"
+          className="mt-20 relative group"
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent z-10" />
-          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-2 shadow-2xl backdrop-blur-sm overflow-hidden">
-             <div className="bg-neutral-900 rounded-xl aspect-[16/9] flex items-center justify-center border border-neutral-800">
-                <span className="text-neutral-700 font-bold italic">Application Preview Dashboard</span>
+          {/* Decorative Glow */}
+          <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 to-purple-500/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+          
+          <div className="relative rounded-2xl border border-neutral-800 bg-neutral-900/50 p-2 shadow-2xl backdrop-blur-sm overflow-hidden">
+             <div className="bg-neutral-900 rounded-xl aspect-[16/9] flex items-center justify-center border border-neutral-800 overflow-hidden">
+                <img 
+                  src="/images/dashboard-preview.png" 
+                  alt="Dashboard Preview" 
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60 pointer-events-none" />
              </div>
           </div>
         </motion.div>
+
       </div>
     </section>
   );

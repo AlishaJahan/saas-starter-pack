@@ -6,6 +6,10 @@ import { connectDB } from './config/db';
 import authRoutes from './routes/authRoutes';
 import adminRoutes from './routes/adminRoutes';
 import userRoutes from './routes/userRoutes';
+import projectRoutes from './routes/projectRoutes';
+import notificationRoutes from './routes/notificationRoutes';
+
+
 
 // Initialize environment variables
 dotenv.config();
@@ -25,6 +29,10 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/notifications', notificationRoutes);
+
+
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({
