@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../config/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { sendWelcomeEmail } from '../config/emailService';
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -34,11 +35,15 @@ export const registerUser = async (req: Request, res: Response) => {
     });
 
     if (user) {
+      // Send Welcome Email (Non-blocking)
+      sendWelcomeEmail(user.email, user.name);
+
       res.status(201).json({
         id: user.id,
         name: user.name,
         email: user.email,
-        token: generateToken(user.id),
+        role: user.role,
+        token: generateToken(user.id, user.role),
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
@@ -65,7 +70,8 @@ export const loginUser = async (req: Request, res: Response) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        token: generateToken(user.id),
+        role: user.role,
+        token: generateToken(user.id, user.role),
       });
     } else {
       res.status(401).json({ message: 'Invalid email or password' });
@@ -76,8 +82,8 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 // Generate JWT
-const generateToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'secret', {
+const generateToken = (id: string, role: string) => {
+  return jwt.sign({ id, role }, process.env.JWT_SECRET || 'secret', {
     expiresIn: '30d',
   });
 };

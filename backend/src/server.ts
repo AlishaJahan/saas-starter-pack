@@ -4,6 +4,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { connectDB } from './config/db';
 import authRoutes from './routes/authRoutes';
+import adminRoutes from './routes/adminRoutes';
+import userRoutes from './routes/userRoutes';
 
 // Initialize environment variables
 dotenv.config();
@@ -21,6 +23,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({

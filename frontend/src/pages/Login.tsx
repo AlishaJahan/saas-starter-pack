@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Rocket, Loader2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Rocket, Loader2, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -22,10 +23,7 @@ const Login = () => {
         password,
       });
 
-      // Save user info to local storage
       localStorage.setItem('userInfo', JSON.stringify(data));
-      
-      // Redirect to dashboard
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Invalid email or password');
@@ -35,13 +33,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex items-center justify-center p-4 transition-colors">
       <div className="absolute inset-0 bg-primary-600/5 blur-[120px] pointer-events-none" />
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-neutral-900 border border-neutral-800 p-8 rounded-3xl shadow-2xl relative z-10"
+        className="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-8 rounded-3xl shadow-2xl relative z-10 text-neutral-900 dark:text-white"
       >
         <div className="text-center mb-10">
           <Link to="/" className="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
@@ -49,7 +47,7 @@ const Login = () => {
             <span className="text-xl font-bold">SAAS Starter</span>
           </Link>
           <h2 className="text-3xl font-bold mb-2">Welcome back</h2>
-          <p className="text-neutral-500 text-sm">Please enter your details to sign in</p>
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm">Please enter your details to sign in</p>
           {error && (
             <motion.div 
               initial={{ opacity: 0, x: -10 }}
@@ -63,13 +61,13 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-neutral-400 mb-2">Email Address</label>
+            <label className="block text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-2">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 dark:text-neutral-600" />
               <input 
                 type="email"
                 required
-                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl py-3 pl-10 pr-4 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
+                className="w-full bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl py-3 pl-10 pr-4 outline-none focus:border-primary-500 transition-all"
                 placeholder="name@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -78,23 +76,30 @@ const Login = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-400 mb-2">Password</label>
+            <label className="block text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-2">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 dark:text-neutral-600" />
               <input 
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
-                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl py-3 pl-10 pr-4 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
+                className="w-full bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl py-3 pl-10 pr-12 outline-none focus:border-primary-500 transition-all"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-white transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
           </div>
 
           <div className="flex items-center justify-between text-xs">
             <label className="flex items-center gap-2 text-neutral-500 cursor-pointer">
-              <input type="checkbox" className="rounded border-neutral-800 bg-neutral-950 text-primary-600 focus:ring-primary-600" />
+              <input type="checkbox" className="rounded border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-primary-600 focus:ring-primary-600" />
               Remember me
             </label>
             <a href="#" className="text-primary-500 hover:text-primary-400 font-medium">Forgot password?</a>
@@ -105,20 +110,13 @@ const Login = () => {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary-600/20"
+            className="w-full bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary-600/20"
           >
-            {loading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <>
-                Sign In
-                <ArrowRight className="w-5 h-5" />
-              </>
-            )}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Sign In <ArrowRight className="w-5 h-5" /></>}
           </motion.button>
         </form>
 
-        <p className="text-center text-neutral-500 text-sm mt-8">
+        <p className="text-center text-neutral-500 dark:text-neutral-400 text-sm mt-8">
           Don't have an account?{' '}
           <Link to="/signup" className="text-primary-500 hover:text-primary-400 font-bold">Sign up for free</Link>
         </p>
