@@ -1,13 +1,25 @@
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const userInfo = localStorage.getItem('userInfo');
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  allowedRoles?: string[];
+}
 
-  if (!userInfo) {
+const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
+  const userInfoString = localStorage.getItem('userInfo');
+
+  if (!userInfoString) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  const userInfo = JSON.parse(userInfoString);
+
+  if (allowedRoles && !allowedRoles.includes(userInfo.role)) {
+    // If user role is not allowed, redirect to dashboard or unauthorized page
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-neutral-950 text-white selection:bg-primary-500/30">
+    <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white selection:bg-primary-500/30 transition-colors duration-300">
       <Navbar />
       <main>
         <Hero />
