@@ -1,5 +1,7 @@
 import { Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+
 
 const plans = [
   {
@@ -76,9 +78,12 @@ const Pricing = () => {
                 ))}
               </ul>
 
-              <button className={`w-full py-4 rounded-xl font-bold transition-all ${plan.popular ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/20' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
-                Get Started
-              </button>
+              <Link to="/signup">
+                <button className={`w-full py-4 rounded-xl font-bold transition-all ${plan.popular ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/20' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
+                  Get Started
+                </button>
+              </Link>
+
             </motion.div>
           ))}
         </div>

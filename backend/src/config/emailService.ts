@@ -1,14 +1,24 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.ethereal.email',
+  host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false, // true for 465, false for other ports
+  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
 });
+
+// Verify connection configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.log('❌ Email Service Error:', error);
+  } else {
+    console.log('📧 Email Service is ready to send messages');
+  }
+});
+
 
 export const sendWelcomeEmail = async (email: string, name: string) => {
   const htmlTemplate = `

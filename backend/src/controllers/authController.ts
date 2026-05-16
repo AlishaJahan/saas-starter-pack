@@ -3,6 +3,8 @@ import { prisma } from '../config/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { sendWelcomeEmail } from '../config/emailService';
+import { createNotification } from './notificationController';
+
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -37,6 +39,10 @@ export const registerUser = async (req: Request, res: Response) => {
     if (user) {
       // Send Welcome Email (Non-blocking)
       sendWelcomeEmail(user.email, user.name);
+      
+      // Create Welcome Notification
+      createNotification(user.id, 'Welcome to SAAS Starter! 🚀', 'We are glad to have you here. Start by creating your first project.', 'success');
+
 
       res.status(201).json({
         id: user.id,
@@ -66,7 +72,11 @@ export const loginUser = async (req: Request, res: Response) => {
     });
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      // Create Login Notification
+      createNotification(user.id, 'New Login Detected', 'You have successfully logged into your account.', 'info');
+
       res.json({
+
         id: user.id,
         name: user.name,
         email: user.email,

@@ -26,12 +26,14 @@ const Navbar = () => {
             </Link>
             <Link to="/signup">
               <motion.button 
+                type="button"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Get Started
               </motion.button>
+
             </Link>
           </div>
         </div>
